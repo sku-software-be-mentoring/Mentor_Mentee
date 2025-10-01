@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
 
     @PostMapping("/")
-    public String CreatePost(String title, String content){
+    public String CreatePost(String title, String content) {
         return title + ": " + content + "게시글 생성 완료";
     }
 
