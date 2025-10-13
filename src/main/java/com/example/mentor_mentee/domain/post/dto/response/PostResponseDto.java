@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Builder
-@RequiredArgsConstructor
-@Getter
 public class PostResponseDto {
     private final Long id;
     private final String title;

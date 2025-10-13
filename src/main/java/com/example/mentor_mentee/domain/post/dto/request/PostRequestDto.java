@@ -3,7 +3,7 @@ package com.example.mentor_mentee.domain.post.dto.request;
 
 import lombok.*;
 
-@RequiredArgsConstructor
+
 @Getter
 @Builder
 public class PostRequestDto {
