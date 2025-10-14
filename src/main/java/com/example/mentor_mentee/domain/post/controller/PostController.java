@@ -1,15 +1,22 @@
 package com.example.mentor_mentee.domain.post.controller;
 
+import com.example.mentor_mentee.domain.post.dto.request.PostRequestDto;
+import com.example.mentor_mentee.domain.post.dto.response.PostResponseDto;
 import com.example.mentor_mentee.domain.post.entity.Post;
+import com.example.mentor_mentee.domain.post.service.PostService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
 @RestController  //해당 클래스가 Web 요청을 담당하는 컨트롤러 기능을 수행
 @RequestMapping("/api/posts")  //요청 기본 엔드포인트(url)를 지정
 public class PostController {
+    private final PostService postService;
 
-    @PostMapping("/")
-    public String CreatePost(String title, String content) {
-        return title + ": " + content + "게시글 생성 완료";
+    @PostMapping
+    public PostResponseDto createPost(@RequestBody PostRequestDto postRequestDto) {
+        PostResponseDto responseDto = postService.createPost(postRequestDto);
+        return responseDto;
     }
 
     @GetMapping
