@@ -1,40 +1,47 @@
 package com.example.mentor_mentee.domain.post.controller;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.mentor_mentee.domain.post.dto.request.CreatePostRequestDto;
+import com.example.mentor_mentee.domain.post.dto.request.UpdatePostRequestDtos;
+import com.example.mentor_mentee.domain.post.dto.response.PostResponseDto;
+import com.example.mentor_mentee.domain.post.service.PostService;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
+    private final PostService postService ;
 
-    @PostMapping("/")
-    public String createPost(String title, String content) {
-        return title + ": " + content + "게시글 생성 완료";
+    @PostMapping
+    public PostResponseDto createPost(@RequestBody CreatePostRequestDto createPostRequestDto) {
+        PostResponseDto responseDto = postService.createPost(createPostRequestDto);
+        return responseDto;
     }
 
     @GetMapping
-    public String getAllPosts() {
-        return "게시글 리스트 조회 완료";
+    public List<PostResponseDto> getAllPosts() {
+        List<PostResponseDto> responseDtos = postService.readPostList();
+        return responseDtos;
     }
 
     @GetMapping("/{post-id}")
-    public String getPostById(@PathVariable(value = "post-id") Long id) {
-        return id + "번 게시글 조회 완료";
+    public PostResponseDto getPostById(@PathVariable(value = "post-id") Long id) {
+        PostResponseDto responseDto = postService.readPost(id);
+        return responseDto;
     }
 
     @PutMapping("/{post-id}")
-    public String updatePost(@PathVariable(value = "post-id") Long id) {
-        return id + "번 게시글 수정 완료";
+    public PostResponseDto updatePost(@RequestBody UpdatePostRequestDtos updatePostRequestDto, @PathVariable(value = "post-id") Long id) {
+        PostResponseDto responseDto = postService.updatePost(updatePostRequestDto, id);
+        return responseDto;
     }
 
     @DeleteMapping("/{post-id}")
     public String deletePost(@PathVariable(value = "post-id") Long id){
-        return id + "번 게시글 삭제 완료";
+        String response = postService.deletePost(id);
+        return response;
     }
 
 }
