@@ -1,5 +1,6 @@
 package com.example.mentor_mentee.domain.comment.entity;
 
+import com.example.mentor_mentee.domain.post.entity.Post;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,9 +22,9 @@ public class Comment {
     @Column(name = "body", nullable = false, length = 300)
     private String body;
 
-    // 댓글을 적은 사용자 정보
+    // 댓글의 부모
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", nullable = false) // FK 생성
+    private Post post;
 
-    // 댓글 좋아요
-
-    // 댓글 싫어요
 }
