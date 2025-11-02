@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-//@EnableWebSecurity // Spring Security의 웹 보안 기능을 활성화함
+@EnableWebSecurity // Spring Security의 웹 보안 기능을 활성화함
 public class SecurityConfig {
 
     @Bean
@@ -20,11 +20,11 @@ public class SecurityConfig {
                     request
                         // /api 경로, swagger로 들어오는 모든 요청은 허락
                         .requestMatchers(
-                                "/api/**",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/swagger-ui.html",
-                                "/swagger-ui-custom.html")
+                            "/api/**",
+                            "/swagger-ui/**",
+                            "/v3/api-docs/**",
+                            "/swagger-ui.html",
+                            "/swagger-ui-custom.html")
                         .permitAll()
                         // 그 외 모든 요청은 인증 필요
                         .anyRequest()
@@ -34,3 +34,4 @@ public class SecurityConfig {
         return http.build();
     }
 }
+
