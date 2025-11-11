@@ -29,9 +29,10 @@ public class Post {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
+    // 추가된 부분
+    @OneToMany(mappedBy = "post")
     @Builder.Default
-    private Long views = 0L;
+    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE,  orphanRemoval = true)
     @Builder.Default
