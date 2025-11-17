@@ -1,6 +1,8 @@
 package com.example.mentor_mentee.domain.post.service;
+import com.example.mentor_mentee.domain.comment.dto.response.CommentResponseDto;
 import com.example.mentor_mentee.domain.post.dto.request.CreateRequestDto;
 import com.example.mentor_mentee.domain.post.dto.request.UpdatePostRequestDto;
+import com.example.mentor_mentee.domain.post.dto.response.PostListResponseDto;
 import com.example.mentor_mentee.domain.post.dto.response.PostResponseDto;
 import com.example.mentor_mentee.domain.post.entity.Post;
 import com.example.mentor_mentee.domain.post.repository.PostRepository;
@@ -8,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -32,7 +36,6 @@ public class PostService {
                 .id(savedPost.getId())
                 .title(savedPost.getTitle())
                 .content(savedPost.getContent())
-                .views(savedPost.getViews())
                 .build();
     }
 
@@ -44,7 +47,6 @@ public class PostService {
                 .id(getPost.getId())
                 .title(getPost.getTitle())
                 .content(getPost.getContent())
-                .views(getPost.getViews())
                 .build();
     }
 
@@ -61,7 +63,6 @@ public class PostService {
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .views(post.getViews())
                 .build();
     }
     // JPA 는 DB에서 본인 캐시메모리에 필요한 데이터 객체를 할당한다.
@@ -78,5 +79,44 @@ public class PostService {
         } else {
             return postId + "번 게시글이 존재하지 않습니다.";
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostListResponseDto> readPostList(){
+        // 1. DB에서 모든 post들을 조회
+        List<Post> posts = postRepository.findAll();
+
+        // 2. 조회된 post들을 PostResponseDto로 반복문을 통해 변환
+        List<PostListResponseDto> responseDtos = posts.stream().map(post -> {
+            String content = post.getContent();
+            String contentSummary = content.length() > 30 ? content.substring(0, 30) + "..." : content;
+            return PostListResponseDto.builder()
+                    .id(post.getId())
+                    .title(post.getTitle())
+                    .contentSummary(contentSummary)
+                    .commentCount(post.getComments().size())
+                    .build();
+        }).toList();
+
+        return responseDtos;
+    }
+
+    @Transactional(readOnly = true)
+    public PostResponseDto readPost(Long postId){
+        // 1. postId를 통해서 Post 조회, 예외처리 필요
+        Post post = postRepository.findById(postId).orElse(null);
+
+        // 2. postResponseDto에 해당 Post 내용을 담아서 반환
+        return PostResponseDto.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .commentCount(post.getComments().size())
+                .comments(post.getComments().
+                        stream().map(comment -> CommentResponseDto.builder()
+                                .id(comment.getId())
+                                .body(comment.getBody())
+                                .build()).toList())
+                .build();
     }
 }
