@@ -14,18 +14,13 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping()
-    public String createComment(@RequestBody CommentRequestDto commentRequestDto){
-        CommentResponseDto responseDto = commentService.createComment(commentRequestDto);
-        return commentRequestDto.getBody()+": 댓글 생성 완료";
+    @PostMapping("/{post-id}")
+    public CommentResponseDto createComment(@PathVariable(value = "post-id") Long postId, @RequestBody CommentRequestDto commentRequestDto) {
+        CommentResponseDto responseDto = commentService.createComment(postId, commentRequestDto);
+        return responseDto;
     }
-
-    @GetMapping()
-    public String getAllComments(){return "댓글 리스트 조회 완료";}
-    @GetMapping("/{comment-id}")
-    public String getCommentById(@PathVariable(value = "comment_id") Long id){return id.toString()+"번 댓글 조회 완료";}
-    @PutMapping("/{comment_id}")
-    public String updateComment(@PathVariable(value = "comment_id") Long id){return id+"번 댓글 수정 완료";}
-    @DeleteMapping("/{comment_id}")
-    public String deleteComment(@PathVariable(value = "comment_id") Long id){return id+"번 댓글 삭제 완료";}
+    @DeleteMapping("/{post-id}/{comment-id}")
+    public String deleteComment(@PathVariable(value = "post-id") Long postId, @PathVariable(value = "comment-id") Long commentId){
+        return commentService.deleteComment(postId, commentId);
+    }
 }
