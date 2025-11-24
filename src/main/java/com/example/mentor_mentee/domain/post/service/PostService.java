@@ -8,6 +8,7 @@ import com.example.mentor_mentee.domain.post.dto.response.PostListResponseDto;
 import com.example.mentor_mentee.domain.post.dto.response.PostResponseDto;
 import com.example.mentor_mentee.domain.post.entity.Post;
 import com.example.mentor_mentee.domain.post.repository.PostRepository;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -44,17 +45,24 @@ public class PostService {
         // 1. postId를 통해서 Post 조회, 예외처리 필요
         Post post = postRepository.findById(postId).orElse(null);
 
-        // 2. postResponseDto에 해당 Post 내용을 담아서 반환
+        //2. post로부터 comment 리스트를 CommentResponseDto로 변환
+        List<Comment> comments = post.getComments();
+        List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
+
+        for (Comment comment : comments) {
+            commentResponseDtos.add(CommentResponseDto.builder()
+                .commentId(comment.getId())
+                .body(comment.getBody())
+                .build());
+        }
+
+        // 3. postResponseDto에 해당 Post 내용을 담아서 반환
         return PostResponseDto.builder()
             .id(post.getId())
             .title(post.getTitle())
             .content(post.getContent())
             .commentCount(post.getComments().size())
-            .comments(post.getComments().
-                stream().map(comment -> CommentResponseDto.builder()
-                .commentId(comment.getId())
-                .body(comment.getBody())
-                .build()).toList())
+            .comments(commentResponseDtos)
             .build();
     }
 
@@ -91,13 +99,16 @@ public class PostService {
         List<Post> posts = postRepository.findAll();
 
         // 2. 조회된 post들을 PostResponseDto로 반복문을 통해 변환
-        List<PostListResponseDto> responseDtos = posts.stream().map(post ->
-            PostListResponseDto.builder()
+        List<PostListResponseDto> responseDtos = posts.stream().map(post -> {
+            String content = post.getContent();
+            String contentSummary = content.length() > 30 ? content.substring(0, 30) + "..." : content;
+            return PostListResponseDto.builder()
                 .id(post.getId())
                 .title(post.getTitle())
+                .contentSummary(contentSummary)
                 .commentCount(post.getComments().size())
-                .build()
-        ).toList();
+                .build();
+        }).toList();
 
         return responseDtos;
     }
