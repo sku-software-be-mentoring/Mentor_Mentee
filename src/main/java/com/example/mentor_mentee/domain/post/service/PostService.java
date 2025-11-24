@@ -8,7 +8,6 @@ import com.example.mentor_mentee.domain.post.dto.response.PostListResponseDto;
 import com.example.mentor_mentee.domain.post.dto.response.PostResponseDto;
 import com.example.mentor_mentee.domain.post.entity.Post;
 import com.example.mentor_mentee.domain.post.repository.PostRepository;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -51,19 +50,19 @@ public class PostService {
 
         for (Comment comment : comments) {
             commentResponseDtos.add(CommentResponseDto.builder()
-                .commentId(comment.getId())
-                .body(comment.getBody())
-                .build());
+                    .commentId(comment.getId())
+                    .body(comment.getBody())
+                    .build());
         }
 
         // 3. postResponseDto에 해당 Post 내용을 담아서 반환
         return PostResponseDto.builder()
-            .id(post.getId())
-            .title(post.getTitle())
-            .content(post.getContent())
-            .commentCount(post.getComments().size())
-            .comments(commentResponseDtos)
-            .build();
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .commentCount(post.getComments().size())
+                .comments(commentResponseDtos)
+                .build();
     }
 
     @Transactional
@@ -99,16 +98,17 @@ public class PostService {
         List<Post> posts = postRepository.findAll();
 
         // 2. 조회된 post들을 PostResponseDto로 반복문을 통해 변환
-        List<PostListResponseDto> responseDtos = posts.stream().map(post -> {
+        List<PostListResponseDto> responseDtos = new ArrayList<>();
+        for(Post post : posts){
             String content = post.getContent();
             String contentSummary = content.length() > 30 ? content.substring(0, 30) + "..." : content;
-            return PostListResponseDto.builder()
-                .id(post.getId())
-                .title(post.getTitle())
-                .contentSummary(contentSummary)
-                .commentCount(post.getComments().size())
-                .build();
-        }).toList();
+            responseDtos.add(PostListResponseDto.builder()
+                    .id(post.getId())
+                    .title(post.getTitle())
+                    .contentSummary(contentSummary)
+                    .commentCount(post.getComments().size())
+                    .build());
+        }
 
         return responseDtos;
     }
