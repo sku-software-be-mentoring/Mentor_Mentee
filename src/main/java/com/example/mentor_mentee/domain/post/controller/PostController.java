@@ -1,5 +1,7 @@
 package com.example.mentor_mentee.domain.post.controller;
 
+import com.example.mentor_mentee.domain.comment.dto.request.CommentRequestDto;
+import com.example.mentor_mentee.domain.comment.dto.response.CommentResponseDto;
 import com.example.mentor_mentee.domain.post.dto.request.CreateRequestDto;
 import com.example.mentor_mentee.domain.post.dto.request.UpdatePostRequestDto;
 import com.example.mentor_mentee.domain.post.dto.response.PostListResponseDto;
@@ -24,6 +26,12 @@ public class PostController {
     }
     // 사실 DB 등록 코드이기에 void도 가능하지만, 데이터 반환뿐만 아니라 성공신호등도 반환받아야함.
     // 따라서 void 보다는 ResponseEntity<PostResponseDto> 같이 성공신호등의 정보 정도는 반환해주어야함.
+
+    @PostMapping("/{user-id}")
+    public PostResponseDto createPost_user(@PathVariable(value = "user-id") Long userId, @RequestBody CreateRequestDto postRequestDto){
+        PostResponseDto responseDto = postService.createPost_user(userId, postRequestDto);
+        return responseDto;
+    }
 
     @GetMapping
     public List<PostListResponseDto> getAllPosts() {

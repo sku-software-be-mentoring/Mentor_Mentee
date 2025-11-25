@@ -1,11 +1,15 @@
 package com.example.mentor_mentee.domain.post.service;
+import com.example.mentor_mentee.domain.comment.dto.request.CommentRequestDto;
 import com.example.mentor_mentee.domain.comment.dto.response.CommentResponseDto;
+import com.example.mentor_mentee.domain.comment.entity.Comment;
 import com.example.mentor_mentee.domain.post.dto.request.CreateRequestDto;
 import com.example.mentor_mentee.domain.post.dto.request.UpdatePostRequestDto;
 import com.example.mentor_mentee.domain.post.dto.response.PostListResponseDto;
 import com.example.mentor_mentee.domain.post.dto.response.PostResponseDto;
 import com.example.mentor_mentee.domain.post.entity.Post;
 import com.example.mentor_mentee.domain.post.repository.PostRepository;
+import com.example.mentor_mentee.domain.user.entity.User;
+import com.example.mentor_mentee.domain.user.repository.UserRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public PostResponseDto createPost(CreateRequestDto createRequestDto) {
@@ -32,6 +37,28 @@ public class PostService {
         Post savedPost = postRepository.save(post);
 
         // 3. 새로 생성한 post 객체 데이터에서 필요한 부분을 PostResponseDto에 넣어서 PostResponseDto 객체 생성
+        return PostResponseDto.builder()
+                .id(savedPost.getId())
+                .title(savedPost.getTitle())
+                .content(savedPost.getContent())
+                .build();
+    }
+
+    @Transactional
+    public PostResponseDto createPost_user(Long userId, CreateRequestDto postRequestDto) {
+        // 1. postId가 식별자인 Post를 조회
+        User user = userRepository.findById(userId).orElse(null);
+
+        // 2. comment 생성
+        Post post = Post.builder()
+                .title(postRequestDto.getTitle())
+                .content(postRequestDto.getContent())
+                .user(user)
+                .build();
+
+        // 3. comment 저장 및 반환
+        Post savedPost =  postRepository.save(post);
+
         return PostResponseDto.builder()
                 .id(savedPost.getId())
                 .title(savedPost.getTitle())

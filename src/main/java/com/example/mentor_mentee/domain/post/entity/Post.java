@@ -1,6 +1,7 @@
 package com.example.mentor_mentee.domain.post.entity;
 
 import com.example.mentor_mentee.domain.comment.entity.Comment;
+import com.example.mentor_mentee.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +38,10 @@ public class Post {
         this.title = title;
         this.content = content;
     }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false) // FK 생성
+    private User user;
 }
 
 // 내 브랜치에 업로드 git pull request
