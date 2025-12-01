@@ -1,7 +1,6 @@
 package com.example.mentor_mentee.domain.user.entity;
 
-import com.example.mentor_mentee.domain.user.dto.request.PatchRequestDto;
-import com.example.mentor_mentee.domain.user.enums.Field;
+import com.example.mentor_mentee.domain.user.dto.response.PatchRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,8 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 외부에서 new User
-@Table(name = "`user`")
+@Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
@@ -42,6 +42,10 @@ public class User {
     @Column(name="inSchool")
     private boolean inSchool;
 
+    // 비밀번호 인코딩하는 함수
+    public void encodePassword(PasswordEncoder encoder){
+        this.password = encoder.encode(this.password);
+    }
 
     // 사용자 정보를 수정하는 함수
     public void patchInfo(PatchRequestDto dto){
@@ -59,10 +63,5 @@ public class User {
                 this.password = dto.getValue();
                 break;
         }
-    }
-
-    // 비밀번호 인코딩하는 함수
-    public void encodePassword(PasswordEncoder encoder){
-        this.password = encoder.encode(this.password);
     }
 }

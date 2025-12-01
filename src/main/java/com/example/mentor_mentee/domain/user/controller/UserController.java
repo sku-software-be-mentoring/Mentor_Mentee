@@ -1,18 +1,20 @@
 package com.example.mentor_mentee.domain.user.controller;
 
 import com.example.mentor_mentee.domain.user.dto.request.JoinRequestDto;
-import com.example.mentor_mentee.domain.user.dto.request.PatchRequestDto;
 import com.example.mentor_mentee.domain.user.dto.response.InfoResponseDto;
+import com.example.mentor_mentee.domain.user.dto.response.PatchRequestDto;
 import com.example.mentor_mentee.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
 @RequiredArgsConstructor
+@RestController
 @RequestMapping("/api/users")
 public class UserController {
+
     private final UserService userService;
+
     // 회원가입
     @PostMapping("")
     public  String join(@RequestBody @Valid JoinRequestDto dto){

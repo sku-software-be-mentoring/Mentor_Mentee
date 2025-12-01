@@ -30,7 +30,7 @@ public class Post {
     private String content;
 
     // 추가된 부분
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL,  orphanRemoval = true)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 

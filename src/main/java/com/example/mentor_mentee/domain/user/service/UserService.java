@@ -1,8 +1,8 @@
 package com.example.mentor_mentee.domain.user.service;
 
 import com.example.mentor_mentee.domain.user.dto.request.JoinRequestDto;
-import com.example.mentor_mentee.domain.user.dto.request.PatchRequestDto;
 import com.example.mentor_mentee.domain.user.dto.response.InfoResponseDto;
+import com.example.mentor_mentee.domain.user.dto.response.PatchRequestDto;
 import com.example.mentor_mentee.domain.user.entity.User;
 import com.example.mentor_mentee.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,11 +10,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class UserService {
-    private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
     // 회원가입
     @Transactional
@@ -69,7 +70,7 @@ public class UserService {
 
         // 3. user 비밀번호 인코딩
         user.encodePassword(passwordEncoder);
-         // ㄴ> 이후, 굳이 다시 save() 해주지 않아도 된다. (@Transactional, 영속성 컨텍스트 덕분에 해당 트랜잭션이 끝나면 자동으로 변경 사항이 업데이트 된다)
+        // ㄴ> 이후, 굳이 다시 save() 해주지 않아도 된다. (@Transactional, 영속성 컨텍스트 덕분에 해당 트랜잭션이 끝나면 자동으로 변경 사항이 업데이트 된다)
     }
 
     // 회원 탈퇴

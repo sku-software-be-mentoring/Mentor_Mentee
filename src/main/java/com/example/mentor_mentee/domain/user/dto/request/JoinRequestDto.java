@@ -15,6 +15,7 @@ public class JoinRequestDto {
     private final String nickname;
     @NotBlank
     private final String classNum;
+
     @NotBlank
     @Email
     private final String email;
