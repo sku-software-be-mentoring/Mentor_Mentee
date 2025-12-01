@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 외부에서 new User
-@Table(name = "User 관련 API")
+@Table(name = "`user`")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
