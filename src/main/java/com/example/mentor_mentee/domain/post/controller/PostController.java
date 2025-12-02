@@ -28,7 +28,7 @@ public class PostController {
   @PostMapping
   public ResponseEntity<BaseResponse<PostResponseDto>> createPost(@RequestBody CreatePostRequestDto createPostRequestDto) {
     PostResponseDto responseDto = postService.createPost(createPostRequestDto);
-    return ResponseEntity.status(201).body(BaseResponse.success(201, "게시글이 성공적으로 생성되었습니다.", responseDto));
+    return ResponseEntity.status(201).body(BaseResponse.success("201", "게시글이 성공적으로 생성되었습니다.", responseDto));
   }
 
   @GetMapping
