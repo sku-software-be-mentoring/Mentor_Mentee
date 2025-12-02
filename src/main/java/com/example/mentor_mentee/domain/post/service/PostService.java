@@ -1,7 +1,7 @@
 package com.example.mentor_mentee.domain.post.service;
 
 import com.example.mentor_mentee.domain.comment.dto.response.CommentResponseDto;
-import com.example.mentor_mentee.domain.post.dto.request.PostRequestDto;
+import com.example.mentor_mentee.domain.post.dto.request.CreatePostRequestDto;
 import com.example.mentor_mentee.domain.post.dto.request.UpdatePostRequestDto;
 import com.example.mentor_mentee.domain.post.dto.response.PostListResponseDto;
 import com.example.mentor_mentee.domain.post.dto.response.PostResponseDto;
@@ -11,7 +11,6 @@ import com.example.mentor_mentee.domain.post.repository.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +21,7 @@ public class PostService {
   private final PostRepository postRepository;
 
   @Transactional
-  public PostResponseDto createPost(PostRequestDto postRequestDto) {
+  public PostResponseDto createPost(CreatePostRequestDto postRequestDto) {
     //1. PostRequestDto 에 있는 값으로 post 클래스 객체 생성
     Post post = Post.builder()
         .title(postRequestDto.getTitle())

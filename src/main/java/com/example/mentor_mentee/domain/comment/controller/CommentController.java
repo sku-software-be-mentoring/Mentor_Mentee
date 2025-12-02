@@ -4,8 +4,6 @@ import com.example.mentor_mentee.domain.comment.dto.request.CommentRequestDto;
 import com.example.mentor_mentee.domain.comment.dto.response.CommentResponseDto;
 
 import com.example.mentor_mentee.domain.comment.service.CommentService;
-import com.example.mentor_mentee.domain.post.dto.request.PostRequestDto;
-import com.example.mentor_mentee.domain.post.dto.response.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

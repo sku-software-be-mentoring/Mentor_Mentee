@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class PostRequestDto {
+public class CreatePostRequestDto {
   private final String title;
   private final String content;
 }
