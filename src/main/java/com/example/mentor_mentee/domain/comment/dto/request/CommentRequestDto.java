@@ -6,6 +6,5 @@ import lombok.Getter;
 @Getter
 @Builder
 public class CommentRequestDto {
-    private final String userid;
-    private final String content;
+    private final String body;
 }

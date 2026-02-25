@@ -1,13 +1,19 @@
 package com.example.mentor_mentee.domain.post.service;
 
+import com.example.mentor_mentee.domain.comment.dto.response.CommentResponseDto;
+import com.example.mentor_mentee.domain.comment.entity.Comment;
 import com.example.mentor_mentee.domain.post.dto.UpdatePostRequestDto;
 import com.example.mentor_mentee.domain.post.dto.request.CreatePostRequestDto;
+import com.example.mentor_mentee.domain.post.dto.response.PostListResponseDto;
 import com.example.mentor_mentee.domain.post.dto.response.PostResponseDto;
 import com.example.mentor_mentee.domain.post.entity.Post;
 import com.example.mentor_mentee.domain.post.repository.PostRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -30,7 +36,6 @@ public class PostService {
                 .id(savedPost.getId())
                 .title(savedPost.getTitle())
                 .content(savedPost.getContent())
-                .views(savedPost.getViews())
                 .build();
     }
 
@@ -39,12 +44,24 @@ public class PostService {
         // 1. postId를 통해서 Post 조회(findById), 예외처리 필요
         Post post = postRepository.findById(postId).orElse(null);
 
-        // 2. postResponseDto에 해당 Post 내용을 담아서 반환
+        // 2. post로부터 comment 리스트를 CommentREsponseDto로 변환
+        List<Comment> comments = post.getComments();
+        List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
+
+        for (Comment comment : comments) {
+            commentResponseDtos.add(CommentResponseDto.builder()
+                    .id(comment.getId())
+                    .body(comment.getBody())
+                    .build());
+        }
+
+        // 3. postResponseDto에 해당 Post 내용을 담아서 반환
         return PostResponseDto.builder()
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .views(post.getViews())
+                .commentCount(post.getComments().size())
+                .comments(commentResponseDtos)
                 .build();
     }
 
@@ -61,7 +78,6 @@ public class PostService {
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .views(post.getViews())
                 .build();
     }
 
@@ -76,7 +92,26 @@ public class PostService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public List<PostListResponseDto> readPostList(){
+        // 1. DB에서 모든 post들을 조회
+        List<Post> posts = postRepository.findAll();
 
+        // 2. 조회된 post들을 PostResponseDto로 반복문을 통해 변환
+        List<PostListResponseDto> responseDtos = new ArrayList<>();
+        for(Post post : posts){
+            String content = post.getContent();
+            String contentSummary = content.length() > 30 ? content.substring(0, 30) + "..." : content;
+            responseDtos.add(PostListResponseDto.builder()
+                    .id(post.getId())
+                    .title(post.getTitle())
+                    .contentSummary(contentSummary)
+                    .commentCount(post.getComments().size())
+                    .build());
+        }
+
+        return responseDtos;
+    }
 }
 
 

@@ -7,10 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    // userid로 모든 comment 찾기
-    List<Comment> findByUserid(String userid);
-
-    // 내용으로 모든 comment 찾기
-    List<Comment> findByContent(String content);
 
 }

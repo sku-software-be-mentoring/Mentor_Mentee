@@ -1,10 +1,14 @@
 package com.example.mentor_mentee.domain.post.controller;
 import com.example.mentor_mentee.domain.post.dto.UpdatePostRequestDto;
 import com.example.mentor_mentee.domain.post.dto.request.CreatePostRequestDto;
+import com.example.mentor_mentee.domain.post.dto.response.PostListResponseDto;
 import com.example.mentor_mentee.domain.post.dto.response.PostResponseDto;
+import com.example.mentor_mentee.domain.post.entity.Post;
 import com.example.mentor_mentee.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,8 +23,9 @@ public class PostController {
     }
 
     @GetMapping
-    public String getAllPosts() {
-        return "게시글 리스트 조회 완료";
+    public List<PostListResponseDto> getAllPosts() {
+        List<PostListResponseDto> responseDtos = postService.readPostList();
+        return responseDtos;
     }
 
     @GetMapping("/{post-id}")

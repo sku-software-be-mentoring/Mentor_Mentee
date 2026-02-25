@@ -19,6 +19,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     boolean existsByTitle(String title);
 
     // 3. 게시글 조회 횟수가 N인 게시글들을 삭제하는 함수
-    Long deleteByViews(Long views);
+    //Long deleteByViews(Long views);
     // ㄴ> 삭제된 개수가 몇개인지 반환함
 }

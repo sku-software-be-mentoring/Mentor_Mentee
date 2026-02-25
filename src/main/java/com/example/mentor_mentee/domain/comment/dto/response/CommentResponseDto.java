@@ -7,7 +7,6 @@ import lombok.Getter;
 @Builder
 public class CommentResponseDto {
     private final Long id;
-    private final String userid;
-    private final String content;
+    private final String body;
 
 }
